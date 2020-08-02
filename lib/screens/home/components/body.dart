@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:furniture_app/components/title_text.dart';
-import 'package:furniture_app/constants.dart';
-import 'package:furniture_app/models/Categories.dart';
+import 'package:furniture_app/screens/home/components/categories.dart';
+import 'package:furniture_app/services/fetchCategories.dart';
 import 'package:furniture_app/size_config.dart';
 
 class Body extends StatelessWidget {
@@ -11,6 +11,7 @@ class Body extends StatelessWidget {
 
     return SingleChildScrollView(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: EdgeInsets.all(defaultSize * 2), // 20
@@ -19,105 +20,15 @@ class Body extends StatelessWidget {
               title: 'Browse by Categories',
             ),
           ),
-          CategoryCard(category: category),
+          FutureBuilder(
+            future: fetchCategories(),
+            builder: (context, snapshot) => snapshot.hasData
+                ? Categories(categories: snapshot.data)
+                : Image.asset('assets/ripple.gif'),
+          ),
+          Divider(height: 5),
         ],
       ),
     );
-  }
-}
-
-class CategoryCard extends StatelessWidget {
-  final Category category;
-
-  const CategoryCard({
-    Key key,
-    // we have to add category
-    @required this.category,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    double defaultSize = SizeConfig.defaultSize;
-    return Padding(
-      padding: EdgeInsets.all(defaultSize * 2), // 20
-      child: SizedBox(
-        width: defaultSize * 20.5, // 205
-        child: AspectRatio(
-          aspectRatio: 0.83,
-          child: Stack(
-            alignment: Alignment.bottomCenter,
-            children: [
-              // this is a custom shape thts why we need to use ClipPath
-              ClipPath(
-                clipper: CategoryCustomShape(),
-                child: AspectRatio(
-                  aspectRatio: 1.025,
-                  child: Container(
-                    padding: EdgeInsets.all(defaultSize * 2),
-                    color: kSecondaryColor,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TitleText(
-                          title: category.title,
-                          defaultSize: defaultSize,
-                        ),
-                        SizedBox(height: defaultSize),
-                        Text(
-                          '${category.numOfProducts}+ Products',
-                          style: TextStyle(
-                            color: kTextColor.withOpacity(0.6),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
-                top: 0,
-                left: 0,
-                right: 0,
-                child: AspectRatio(
-                  aspectRatio: 1.15,
-                  child: FadeInImage.assetNetwork(
-                    placeholder: 'assets/spinner.gif',
-                    image: category.image,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class CategoryCustomShape extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    Path path = Path();
-    double height = size.height;
-    double width = size.width;
-    double cornerSize = 30;
-
-    path.lineTo(0, height - cornerSize);
-    path.quadraticBezierTo(0, height, cornerSize, height);
-    path.lineTo(width - cornerSize, height);
-    path.quadraticBezierTo(width, height, width, height - cornerSize);
-    path.lineTo(width, cornerSize);
-    path.quadraticBezierTo(width, 0, width - cornerSize, 0);
-    path.lineTo(cornerSize, cornerSize * 0.75);
-    path.quadraticBezierTo(0, cornerSize, 0, cornerSize * 2);
-
-    path.close();
-
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) {
-    return true;
   }
 }
