@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:furniture_app/models/Product.dart';
+import 'package:furniture_app/screens/details/details_screen.dart';
 import 'package:furniture_app/screens/home/components/product_card.dart';
 import 'package:furniture_app/size_config.dart';
 
@@ -28,8 +29,19 @@ class RecommendedProducts extends StatelessWidget {
           crossAxisSpacing: 20,
           childAspectRatio: 0.693,
         ),
-        itemBuilder: (context, index) =>
-            ProductCard(product: products[index], press: () {}),
+        itemBuilder: (context, index) => ProductCard(
+          product: products[index],
+          press: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DetailsScreen(
+                  product: products[index],
+                ),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
