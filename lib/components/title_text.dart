@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:furniture_app/size_config.dart';
 
 class TitleText extends StatelessWidget {
   final String title;
 
   const TitleText({
     Key key,
-    @required this.defaultSize,
     this.title,
   }) : super(key: key);
 
-  final double defaultSize;
-
   @override
   Widget build(BuildContext context) {
+    double defaultSize = SizeConfig.defaultSize;
     return Text(
       title,
       style: TextStyle(

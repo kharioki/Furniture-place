@@ -38,7 +38,6 @@ class CategoryCard extends StatelessWidget {
                       children: [
                         TitleText(
                           title: category.title,
-                          defaultSize: defaultSize,
                         ),
                         SizedBox(height: defaultSize),
                         Text(
