@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:furniture_app/constants.dart';
 import 'package:furniture_app/models/Product.dart';
+import 'package:furniture_app/screens/details/components/product_description.dart';
 import 'package:furniture_app/screens/details/components/product_info.dart';
 import 'package:furniture_app/size_config.dart';
 
@@ -13,87 +13,39 @@ class Body extends StatelessWidget {
   Widget build(BuildContext context) {
     double defaultSize = SizeConfig.defaultSize;
     return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ProductInfo(product: product),
-          ProductDescription(
-            product: product,
-            press: () {},
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class ProductDescription extends StatelessWidget {
-  const ProductDescription({
-    Key key,
-    @required this.product,
-    this.press,
-  }) : super(key: key);
-
-  final Product product;
-  final Function press;
-
-  @override
-  Widget build(BuildContext context) {
-    double defaultSize = SizeConfig.defaultSize;
-    return Container(
-      constraints: BoxConstraints(minHeight: defaultSize * 44),
-      padding: EdgeInsets.only(
-        top: defaultSize * 9, // 90
-        left: defaultSize * 2, // 20
-        right: defaultSize * 2, // 20
-      ),
-      // height: 500,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(defaultSize * 1.2),
-          topRight: Radius.circular(defaultSize * 1.2),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            product.subTitle,
-            style: TextStyle(
-              fontSize: defaultSize * 1.8,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(height: defaultSize * 3),
-          Text(
-            product.description,
-            style: TextStyle(
-              color: kTextColor.withOpacity(0.7),
-              height: 1.5,
-            ),
-          ),
-          SizedBox(height: defaultSize * 3),
-          SizedBox(
-            width: double.infinity,
-            child: FlatButton(
-              padding: EdgeInsets.all(defaultSize * 1.5),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(50),
+      child: SizedBox(
+        width: double.infinity,
+        height: SizeConfig.orientation == Orientation.landscape
+            ? SizeConfig.screenWidth
+            : SizeConfig.screenHeight - AppBar().preferredSize.height,
+        child: Stack(
+          // crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ProductInfo(product: product),
+            Positioned(
+              top: defaultSize * 37.5,
+              left: 0,
+              right: 0,
+              child: ProductDescription(
+                product: product,
+                press: () {},
               ),
-              color: kPrimaryColor,
-              onPressed: press,
-              child: Text(
-                'Add to Cart',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: defaultSize * 1.6, // 16
-                  fontWeight: FontWeight.bold,
+            ),
+            Positioned(
+              top: defaultSize * 9.5,
+              right: -defaultSize * 3.5,
+              child: Hero(
+                tag: product.id,
+                child: Image.network(
+                  product.image,
+                  fit: BoxFit.cover,
+                  height: defaultSize * 37.8, // 378
+                  width: defaultSize * 36.4, // 364
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
