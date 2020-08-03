@@ -4,6 +4,7 @@ import 'package:furniture_app/models/Product.dart';
 import 'package:furniture_app/screens/home/components/categories.dart';
 import 'package:furniture_app/screens/home/components/product_card.dart';
 import 'package:furniture_app/services/fetchCategories.dart';
+import 'package:furniture_app/services/fetchProducts.dart';
 import 'package:furniture_app/size_config.dart';
 
 class Body extends StatelessWidget {
@@ -30,8 +31,47 @@ class Body extends StatelessWidget {
             padding: EdgeInsets.all(defaultSize * 2), // 20
             child: TitleText(title: 'Recommended for You'),
           ),
-          ProductCard(product: product, press: () {}),
+          FutureBuilder(
+            future: fetchProducts(),
+            builder: (context, snapshot) {
+              return snapshot.hasData
+                  ? RecommendedProducts(products: snapshot.data)
+                  : Center(child: Image.asset('assets/ripple.gif'));
+            },
+          ),
         ],
+      ),
+    );
+  }
+}
+
+class RecommendedProducts extends StatelessWidget {
+  final List<Product> products;
+
+  const RecommendedProducts({
+    Key key,
+    this.products,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    double defaultSize = SizeConfig.defaultSize;
+    return Padding(
+      padding: EdgeInsets.all(defaultSize * 2), // 20
+      child: GridView.builder(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        // for demo purposes
+        itemCount: products.length,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount:
+              SizeConfig.orientation == Orientation.portrait ? 2 : 4,
+          mainAxisSpacing: 20,
+          crossAxisSpacing: 20,
+          childAspectRatio: 0.693,
+        ),
+        itemBuilder: (context, index) =>
+            ProductCard(product: products[index], press: () {}),
       ),
     );
   }
