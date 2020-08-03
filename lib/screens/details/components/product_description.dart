@@ -31,45 +31,47 @@ class ProductDescription extends StatelessWidget {
           topRight: Radius.circular(defaultSize * 1.2),
         ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            product.subTitle,
-            style: TextStyle(
-              fontSize: defaultSize * 1.8,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(height: defaultSize * 3),
-          Text(
-            product.description,
-            style: TextStyle(
-              color: kTextColor.withOpacity(0.7),
-              height: 1.5,
-            ),
-          ),
-          SizedBox(height: defaultSize * 3),
-          SizedBox(
-            width: double.infinity,
-            child: FlatButton(
-              padding: EdgeInsets.all(defaultSize * 1.5),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(50),
+      child: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              product.subTitle,
+              style: TextStyle(
+                fontSize: defaultSize * 1.8,
+                fontWeight: FontWeight.bold,
               ),
-              color: kPrimaryColor,
-              onPressed: press,
-              child: Text(
-                'Add to Cart',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: defaultSize * 1.6, // 16
-                  fontWeight: FontWeight.bold,
+            ),
+            SizedBox(height: defaultSize * 3),
+            Text(
+              product.description,
+              style: TextStyle(
+                color: kTextColor.withOpacity(0.7),
+                height: 1.5,
+              ),
+            ),
+            SizedBox(height: defaultSize * 3),
+            SizedBox(
+              width: double.infinity,
+              child: FlatButton(
+                padding: EdgeInsets.all(defaultSize * 1.5),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                color: kPrimaryColor,
+                onPressed: press,
+                child: Text(
+                  'Add to Cart',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: defaultSize * 1.6, // 16
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
